@@ -1,7 +1,7 @@
 # BossInkAttack.gd
 extends State
 class_name BossInkAttackState
-
+# test comment please remove
 var owner_boss
 
 # Duration of this state itself (e.g., time for boss to play an animation for the ink attack)
