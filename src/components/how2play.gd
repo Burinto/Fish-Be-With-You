@@ -28,74 +28,76 @@ onready var scene12=$scene12
 onready var scene13=$scene13
 onready var scene14=$scene14
 onready var scene15=$scene15
+onready var scene16=$scene16
+onready var fade_rect = $animation/fade
+onready var tween = $animation/Tween
+var screen_width = 1280
+
+# Scene references
+onready var scenes = [
+	$scene1, $scene2, $scene3, $scene4, $scene5,
+	$scene6, $scene7, $scene8, $scene9, $scene10,
+	$scene11, $scene12, $scene13, $scene14, $scene15, $scene16
+]
+
+# Button positions for each step
+var button_positions = [
+	Vector2(), # unused at step 0
+	Vector2(549, 303),
+	Vector2(851, 285),
+	Vector2(851, 285),
+	Vector2(851, 285),
+	Vector2(907, 249),
+	Vector2(587, 329),
+	Vector2(587, 329),
+	Vector2(587, 329),
+	Vector2(1031, 223),
+	Vector2(1031, 223),
+	Vector2(1055, 354),
+	Vector2(1055, 354),
+	Vector2(1055, 354),
+	Vector2(1055, 354),
+	Vector2(1055, 354)
+]
+
+
 # Track how many times the "Next" button has been pressed
 var step = 0
 
 func _ready():
-	pass # Replace with function body.
+	# Only show the first scene initially
+	for i in range(1, scenes.size()):
+		scenes[i].visible = false
+	fade_rect.modulate.a = 0
 
 
 
 func _on_next_pressed():
+	if step >= scenes.size() - 1:
+		return  # No more scenes
+
 	step += 1
-	
-	match step:
-			1:
-				scene1.visible= false
-				scene2.visible= true
-				next_button.rect_position = Vector2(549, 303)
-			
-			2:
-				scene2.visible= false
-				scene3.visible=true
-				next_button.rect_position = Vector2(851, 285)
-			3:
-				scene3.visible= false
-				scene4.visible=true
-				next_button.rect_position = Vector2(851, 285)
-			4:
-				scene4.visible= false
-				scene5.visible=true
-				next_button.rect_position = Vector2(851, 285)
-			5:
-				scene5.visible= false
-				scene6.visible=true
-				next_button.rect_position = Vector2(907,249)
-			6:
-				scene6.visible= false
-				scene7.visible=true
-				next_button.rect_position = Vector2(587,329)
-			7:
-				scene7.visible= false
-				scene8.visible=true
-				next_button.rect_position = Vector2(587,329)
-			8:
-				scene8.visible= false
-				scene9.visible=true
-				next_button.rect_position = Vector2(587,329)
-			9:
-				scene9.visible= false
-				scene10.visible=true
-				next_button.rect_position = Vector2(1031, 223)
-			10: 
-				scene10.visible= false
-				scene11.visible=true
-				next_button.rect_position = Vector2(1031, 223)
-			11:
-				scene11.visible= false
-				scene12.visible=true
-				next_button.rect_position = Vector2(1055,354)
-			12:
-				scene12.visible= false
-				scene13.visible=true
-				next_button.rect_position = Vector2(1055,354)
-			13:
-				scene13.visible= false
-				scene14.visible=true
-				next_button.rect_position = Vector2(1055,354)
-			14:
-				scene14.visible= false
-				scene15.visible=true
-				next_button.rect_position = Vector2(1055,354)
-			15: 
-				get_tree().change_scene("res://src/levels/Level1.tscn")
+	# Start fade out
+	tween.interpolate_property(fade_rect, "modulate:a", 0, 1, 0.2, Tween.TRANS_LINEAR, Tween.EASE_IN)
+	tween.start()
+	yield(tween, "tween_all_completed")
+
+	# Change scene visibility
+	for i in range(scenes.size()):
+		scenes[i].visible = (i == step)
+
+	# Move the button
+	next_button.rect_position = button_positions[step]
+
+	# Fade back in
+	tween.interpolate_property(fade_rect, "modulate:a", 1, 0, 0.2, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+	tween.start()
+	yield(tween, "tween_all_completed")
+
+
+func _on_yes_pressed():
+	get_tree().change_scene("res://src/levels/Level1.tscn")
+
+
+func _on_no_pressed():
+	get_tree().change_scene("res://src/MainMenu.tscn")

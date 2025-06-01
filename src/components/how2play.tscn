@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=2]
+[gd_scene load_steps=65 format=2]
 
 [ext_resource path="res://assets/pong_pagong/1_45 time no glow or highlight.png" type="Texture" id=1]
 [ext_resource path="res://assets/buttons/settings-btn.png" type="Texture" id=2]
@@ -45,14 +45,21 @@
 [ext_resource path="res://assets/pong_pagong/2 stars only.png" type="Texture" id=43]
 [ext_resource path="res://assets/pong_pagong/3 fish highlight.png" type="Texture" id=44]
 [ext_resource path="res://assets/pong_pagong/text 6.png" type="Texture" id=45]
+[ext_resource path="res://assets/pong_pagong/bg_blur.png" type="Texture" id=46]
+[ext_resource path="res://assets/pong_pagong/B2HOME hovered and pressed.png" type="Texture" id=47]
+[ext_resource path="res://assets/pong_pagong/B2HOME (1).png" type="Texture" id=48]
+[ext_resource path="res://assets/pong_pagong/play hovered and pressed.png" type="Texture" id=49]
+[ext_resource path="res://assets/pong_pagong/next hovered.png" type="Texture" id=50]
+[ext_resource path="res://assets/pong_pagong/text 8.png" type="Texture" id=51]
+[ext_resource path="res://assets/pong_pagong/next pressed.png" type="Texture" id=52]
 
-[sub_resource type="StyleBoxTexture" id=3]
-texture = ExtResource( 6 )
+[sub_resource type="StyleBoxTexture" id=9]
+texture = ExtResource( 50 )
 region_rect = Rect2( 0, 0, 1350, 1350 )
 
-[sub_resource type="StyleBoxTexture" id=4]
-texture = ExtResource( 6 )
-region_rect = Rect2( 0, 0, 1350, 1350 )
+[sub_resource type="StyleBoxTexture" id=10]
+texture = ExtResource( 52 )
+region_rect = Rect2( 0, 0, 1669, 1669 )
 
 [sub_resource type="StyleBoxTexture" id=2]
 texture = ExtResource( 6 )
@@ -67,6 +74,30 @@ font_data = ExtResource( 18 )
 
 [sub_resource type="DynamicFont" id=6]
 font_data = ExtResource( 18 )
+
+[sub_resource type="StyleBoxTexture" id=15]
+texture = ExtResource( 49 )
+region_rect = Rect2( 0, 0, 6844, 2780 )
+
+[sub_resource type="StyleBoxTexture" id=16]
+texture = ExtResource( 49 )
+region_rect = Rect2( 0, 0, 6844, 2780 )
+
+[sub_resource type="StyleBoxTexture" id=7]
+texture = ExtResource( 49 )
+region_rect = Rect2( 0, 0, 6844, 2780 )
+
+[sub_resource type="StyleBoxTexture" id=13]
+texture = ExtResource( 47 )
+region_rect = Rect2( 0, 0, 6072, 3156 )
+
+[sub_resource type="StyleBoxTexture" id=14]
+texture = ExtResource( 47 )
+region_rect = Rect2( 0, 0, 6072, 3156 )
+
+[sub_resource type="StyleBoxTexture" id=8]
+texture = ExtResource( 48 )
+region_rect = Rect2( 0, 0, 5788, 2788 )
 
 [node name="tutorial" type="Control"]
 anchor_right = 1.0
@@ -98,8 +129,8 @@ margin_left = 977.0
 margin_top = 304.0
 margin_right = 1089.0
 margin_bottom = 408.0
-custom_styles/hover = SubResource( 3 )
-custom_styles/pressed = SubResource( 4 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 10 )
 custom_styles/normal = SubResource( 2 )
 
 [node name="scene1" type="Node2D" parent="."]
@@ -719,4 +750,50 @@ position = Vector2( 898, 405 )
 scale = Vector2( 0.231751, 0.248133 )
 texture = ExtResource( 24 )
 
+[node name="scene16" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="TextureRect" type="TextureRect" parent="scene16"]
+margin_right = 1279.0
+margin_bottom = 716.0
+texture = ExtResource( 46 )
+stretch_mode = 1
+
+[node name="HowToPlayWhenClicked" type="Sprite" parent="scene16"]
+position = Vector2( 670, 320 )
+scale = Vector2( 0.313099, 0.352323 )
+texture = ExtResource( 51 )
+
+[node name="yes" type="Button" parent="scene16"]
+margin_left = 418.0
+margin_top = 384.0
+margin_right = 674.0
+margin_bottom = 521.0
+custom_styles/hover = SubResource( 15 )
+custom_styles/pressed = SubResource( 16 )
+custom_styles/normal = SubResource( 7 )
+
+[node name="no" type="Button" parent="scene16"]
+margin_left = 668.0
+margin_top = 391.0
+margin_right = 932.0
+margin_bottom = 510.0
+custom_styles/hover = SubResource( 13 )
+custom_styles/pressed = SubResource( 14 )
+custom_styles/normal = SubResource( 8 )
+
+[node name="animation" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="fade" type="ColorRect" parent="animation"]
+modulate = Color( 0.00392157, 0.00392157, 0.00392157, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )
+
+[node name="Tween" type="Tween" parent="animation"]
+
 [connection signal="pressed" from="fg/next" to="." method="_on_next_pressed"]
+[connection signal="pressed" from="scene16/yes" to="." method="_on_yes_pressed"]
+[connection signal="pressed" from="scene16/no" to="." method="_on_no_pressed"]

@@ -6,6 +6,8 @@ var path_to_next_scene
 var current_score: int = 0
 signal score_updated(new_score)
 
+#pang track current level
+var current_level: int = 1
 #current size points to eat
 signal current_size_updated
 var current_size_points := 0 setget set_current_size_points
