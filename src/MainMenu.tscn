@@ -1,42 +1,15 @@
-[gd_scene load_steps=58 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://assets/buttons/btn2-state1.png" type="Texture" id=1]
 [ext_resource path="res://assets/buttons/btn1-state1.png" type="Texture" id=2]
 [ext_resource path="res://assets/buttons/btn1-state2.png" type="Texture" id=3]
 [ext_resource path="res://scripts/MainMenu.gd" type="Script" id=4]
 [ext_resource path="res://assets/buttons/btn2-state2.png" type="Texture" id=5]
-[ext_resource path="res://assets/buttons/exit game hovered.png" type="Texture" id=6]
+[ext_resource path="res://assets/403970123_203114046100340_6409654091407568398_n.jpg" type="Texture" id=6]
 [ext_resource path="res://assets/buttons/btn3-state1.png" type="Texture" id=7]
 [ext_resource path="res://assets/buttons/btn3-state2.png" type="Texture" id=8]
-[ext_resource path="res://assets/buttons/bg.png" type="Texture" id=9]
-[ext_resource path="res://assets/buttons/shell.png" type="Texture" id=10]
-[ext_resource path="res://assets/buttons/settings-combined-state2.png" type="Texture" id=11]
-[ext_resource path="res://assets/buttons/pearl button.png" type="Texture" id=12]
-[ext_resource path="res://assets/buttons/settings-combined-state1.png.png" type="Texture" id=13]
-[ext_resource path="res://assets/buttons/pearl when pressed.png" type="Texture" id=14]
-[ext_resource path="res://assets/buttons/pearl hovered.png" type="Texture" id=15]
-[ext_resource path="res://assets/buttons/how to play.png" type="Texture" id=16]
-[ext_resource path="res://assets/buttons/exit game.png" type="Texture" id=17]
-[ext_resource path="res://assets/buttons/how to play hovered.png" type="Texture" id=18]
-[ext_resource path="res://assets/buttons/how to play when clicked.png" type="Texture" id=19]
-[ext_resource path="res://assets/buttons/yes.png" type="Texture" id=20]
-[ext_resource path="res://assets/buttons/no.png" type="Texture" id=21]
-[ext_resource path="res://assets/buttons/blur.png" type="Texture" id=22]
-[ext_resource path="res://assets/buttons/exit game when clciked.png" type="Texture" id=23]
-[ext_resource path="res://assets/buttons/yes hovered adn pressed.png" type="Texture" id=24]
-[ext_resource path="res://assets/buttons/no hovered and pressed.png" type="Texture" id=25]
-
-[sub_resource type="StyleBoxTexture" id=14]
-texture = ExtResource( 15 )
-region_rect = Rect2( 0, 0, 9012, 9012 )
-
-[sub_resource type="StyleBoxTexture" id=15]
-texture = ExtResource( 14 )
-region_rect = Rect2( 0, 0, 9012, 9012 )
-
-[sub_resource type="StyleBoxTexture" id=16]
-texture = ExtResource( 12 )
-region_rect = Rect2( 0, 0, 383, 383 )
+[ext_resource path="res://scripts/JigglePhysx2.gd" type="Script" id=9]
+[ext_resource path="res://assets/buttons/settings-txt.png" type="Texture" id=11]
 
 [sub_resource type="StyleBoxTexture" id=1]
 texture = ExtResource( 3 )
@@ -51,8 +24,7 @@ texture = ExtResource( 2 )
 region_rect = Rect2( 0, 0, 414, 220 )
 
 [sub_resource type="StyleBoxTexture" id=4]
-resource_local_to_scene = true
-texture = ExtResource( 5 )
+texture = ExtResource( 1 )
 region_rect = Rect2( 0, 0, 446, 220 )
 
 [sub_resource type="StyleBoxTexture" id=5]
@@ -64,7 +36,7 @@ texture = ExtResource( 1 )
 region_rect = Rect2( 0, 0, 446, 220 )
 
 [sub_resource type="StyleBoxTexture" id=7]
-texture = ExtResource( 8 )
+texture = ExtResource( 7 )
 region_rect = Rect2( 0, 0, 504, 252 )
 
 [sub_resource type="StyleBoxTexture" id=8]
@@ -77,272 +49,89 @@ region_rect = Rect2( 0, 0, 504, 252 )
 
 [sub_resource type="StyleBoxTexture" id=10]
 texture = ExtResource( 11 )
-region_rect = Rect2( 0, 0, 300, 390 )
+region_rect = Rect2( 0, 0, 300, 170 )
 
-[sub_resource type="StyleBoxTexture" id=17]
-texture = ExtResource( 11 )
-region_rect = Rect2( 0, 0, 300, 390 )
+[sub_resource type="StyleBoxTexture" id=11]
 
 [sub_resource type="StyleBoxTexture" id=13]
-texture = ExtResource( 13 )
-region_rect = Rect2( 0, 0, 300, 390 )
+texture = ExtResource( 11 )
+region_rect = Rect2( 0, 0, 300, 170 )
 
 [sub_resource type="ButtonGroup" id=12]
-
-[sub_resource type="StyleBoxTexture" id=18]
-texture = ExtResource( 18 )
-region_rect = Rect2( 0, 0, 697, 269 )
-
-[sub_resource type="StyleBoxTexture" id=19]
-texture = ExtResource( 18 )
-region_rect = Rect2( 0, 0, 697, 269 )
-
-[sub_resource type="StyleBoxTexture" id=20]
-texture = ExtResource( 16 )
-region_rect = Rect2( 0, 0, 697, 266 )
-
-[sub_resource type="StyleBoxTexture" id=21]
-texture = ExtResource( 6 )
-region_rect = Rect2( 0, 0, 656, 269 )
-
-[sub_resource type="StyleBoxTexture" id=22]
-texture = ExtResource( 6 )
-region_rect = Rect2( 0, 0, 656, 269 )
-
-[sub_resource type="StyleBoxTexture" id=23]
-texture = ExtResource( 17 )
-region_rect = Rect2( 0, 0, 656, 269 )
-
-[sub_resource type="StyleBoxTexture" id=34]
-texture = ExtResource( 24 )
-region_rect = Rect2( 0, 0, 6476, 2412 )
-
-[sub_resource type="StyleBoxTexture" id=27]
-texture = ExtResource( 24 )
-region_rect = Rect2( 0, 0, 6476, 2412 )
-
-[sub_resource type="StyleBoxTexture" id=24]
-texture = ExtResource( 20 )
-region_rect = Rect2( 0, 0, 6476, 2412 )
-
-[sub_resource type="StyleBoxTexture" id=28]
-texture = ExtResource( 25 )
-region_rect = Rect2( 0, 0, 5876, 2412 )
-
-[sub_resource type="StyleBoxTexture" id=29]
-texture = ExtResource( 25 )
-region_rect = Rect2( 0, 0, 5876, 2412 )
-
-[sub_resource type="StyleBoxTexture" id=25]
-texture = ExtResource( 21 )
-region_rect = Rect2( 0, 0, 5876, 2412 )
-
-[sub_resource type="StyleBoxTexture" id=30]
-texture = ExtResource( 24 )
-region_rect = Rect2( 0, 0, 6476, 2412 )
-
-[sub_resource type="StyleBoxTexture" id=31]
-texture = ExtResource( 24 )
-region_rect = Rect2( 0, 0, 6476, 2412 )
-
-[sub_resource type="StyleBoxTexture" id=32]
-texture = ExtResource( 25 )
-region_rect = Rect2( 0, 0, 5876, 2412 )
-
-[sub_resource type="StyleBoxTexture" id=33]
-texture = ExtResource( 25 )
-region_rect = Rect2( 0, 0, 5876, 2412 )
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource( 4 )
 
-[node name="bg" type="CanvasLayer" parent="."]
-layer = -14
-
-[node name="Background2" type="Sprite" parent="bg"]
-position = Vector2( 639, 360.25 )
-scale = Vector2( 0.212667, 0.213481 )
-texture = ExtResource( 9 )
-
-[node name="Shell" type="Sprite" parent="bg"]
-position = Vector2( 661.207, 454.733 )
-scale = Vector2( 0.359207, 0.328214 )
-texture = ExtResource( 10 )
-
 [node name="Control" type="Control" parent="."]
-margin_top = 3.0
 margin_right = 1280.0
-margin_bottom = 723.0
-
-[node name="PearlButton1" type="Button" parent="Control"]
-margin_left = 421.207
-margin_top = 423.733
-margin_right = 578.207
-margin_bottom = 572.733
-custom_styles/hover = SubResource( 14 )
-custom_styles/pressed = SubResource( 15 )
-custom_styles/normal = SubResource( 16 )
-
-[node name="PearlButton2" type="Button" parent="Control"]
-margin_left = 581.207
-margin_top = 414.733
-margin_right = 738.207
-margin_bottom = 563.733
-custom_styles/hover = SubResource( 14 )
-custom_styles/pressed = SubResource( 15 )
-custom_styles/normal = SubResource( 16 )
-
-[node name="PearlButton3" type="Button" parent="Control"]
-margin_left = 742.207
-margin_top = 423.733
-margin_right = 899.207
-margin_bottom = 572.733
-custom_styles/hover = SubResource( 14 )
-custom_styles/pressed = SubResource( 15 )
-custom_styles/normal = SubResource( 16 )
+margin_bottom = 720.0
 
 [node name="NewGame" type="Button" parent="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 427.207
-margin_top = 526.733
-margin_right = -708.793
-margin_bottom = -113.267
+margin_left = 310.0
+margin_top = 364.0
+margin_right = -810.0
+margin_bottom = -276.0
 rect_clip_content = true
 custom_styles/hover = SubResource( 1 )
 custom_styles/pressed = SubResource( 2 )
 custom_styles/normal = SubResource( 3 )
+script = ExtResource( 9 )
 
 [node name="LoadGame" type="Button" parent="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 585.207
-margin_top = 519.733
-margin_right = -534.793
-margin_bottom = -120.267
+margin_left = 539.0
+margin_top = 367.0
+margin_right = -581.0
+margin_bottom = -273.0
 custom_styles/hover = SubResource( 4 )
 custom_styles/pressed = SubResource( 5 )
 custom_styles/normal = SubResource( 6 )
+script = ExtResource( 9 )
 
 [node name="ChangeAppearance" type="Button" parent="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 745.207
-margin_top = 528.733
-margin_right = -374.793
-margin_bottom = -111.267
+margin_left = 744.0
+margin_top = 363.0
+margin_right = -376.0
+margin_bottom = -277.0
 custom_styles/hover = SubResource( 7 )
 custom_styles/pressed = SubResource( 8 )
 custom_styles/normal = SubResource( 9 )
+script = ExtResource( 9 )
 
 [node name="Settings" type="Button" parent="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 1112.0
-margin_top = 39.0
-margin_right = -44.0
-margin_bottom = -557.0
+margin_left = 1075.0
+margin_top = 94.0
+margin_right = -45.0
+margin_bottom = -546.0
 custom_styles/hover = SubResource( 10 )
-custom_styles/pressed = SubResource( 17 )
+custom_styles/pressed = SubResource( 11 )
 custom_styles/normal = SubResource( 13 )
 group = SubResource( 12 )
 
-[node name="tutorial" type="Button" parent="Control"]
-margin_left = 63.0
-margin_top = 40.0
-margin_right = 259.0
-margin_bottom = 130.0
-custom_styles/hover = SubResource( 18 )
-custom_styles/pressed = SubResource( 19 )
-custom_styles/normal = SubResource( 20 )
+[node name="BG" type="CanvasLayer" parent="."]
+layer = -1
 
-[node name="exit" type="Button" parent="Control"]
-margin_left = 1072.0
-margin_top = 637.0
-margin_right = 1235.0
-margin_bottom = 717.0
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 22 )
-custom_styles/normal = SubResource( 23 )
-
-[node name="tutorial" type="CanvasLayer" parent="."]
-layer = 2
+[node name="ChangeTextureOfThis" type="Sprite" parent="BG"]
 visible = false
+position = Vector2( 208, 262 )
+texture = ExtResource( 6 )
 
-[node name="blur" type="TextureRect" parent="tutorial"]
-margin_right = 1279.0
-margin_bottom = 720.0
-texture = ExtResource( 22 )
-stretch_mode = 1
+[node name="FG" type="CanvasLayer" parent="."]
+layer = 0
 
-[node name="how2play" type="Sprite" parent="tutorial"]
-position = Vector2( 661, 343.313 )
-scale = Vector2( 0.36262, 0.389947 )
-texture = ExtResource( 19 )
-
-[node name="yes" type="Button" parent="tutorial"]
-margin_left = 413.0
-margin_top = 461.0
-margin_right = 665.0
-margin_bottom = 562.0
-custom_styles/hover = SubResource( 34 )
-custom_styles/pressed = SubResource( 27 )
-custom_styles/normal = SubResource( 24 )
-
-[node name="no" type="Button" parent="tutorial"]
-margin_left = 668.0
-margin_top = 460.0
-margin_right = 917.0
-margin_bottom = 562.0
-custom_styles/hover = SubResource( 28 )
-custom_styles/pressed = SubResource( 29 )
-custom_styles/normal = SubResource( 25 )
-
-[node name="exit" type="CanvasLayer" parent="."]
-layer = 2
+[node name="ChangeTextureOfThis" type="Sprite" parent="FG"]
 visible = false
+position = Vector2( 208, 262 )
+texture = ExtResource( 6 )
 
-[node name="blur" type="TextureRect" parent="exit"]
-margin_right = 1279.0
-margin_bottom = 720.0
-texture = ExtResource( 22 )
-stretch_mode = 1
-
-[node name="exit" type="Sprite" parent="exit"]
-position = Vector2( 661, 343.313 )
-scale = Vector2( 0.36262, 0.389947 )
-texture = ExtResource( 23 )
-
-[node name="ExitYes" type="Button" parent="exit"]
-margin_left = 413.0
-margin_top = 461.0
-margin_right = 665.0
-margin_bottom = 562.0
-custom_styles/hover = SubResource( 30 )
-custom_styles/pressed = SubResource( 31 )
-custom_styles/normal = SubResource( 24 )
-
-[node name="ExitNo" type="Button" parent="exit"]
-margin_left = 668.0
-margin_top = 460.0
-margin_right = 917.0
-margin_bottom = 562.0
-custom_styles/hover = SubResource( 32 )
-custom_styles/pressed = SubResource( 33 )
-custom_styles/normal = SubResource( 25 )
-
-[connection signal="pressed" from="Control/PearlButton1" to="." method="_on_PearlButton1_pressed"]
-[connection signal="pressed" from="Control/PearlButton2" to="." method="_on_PearlButton2_pressed"]
-[connection signal="pressed" from="Control/PearlButton2" to="." method="_on_PearlButton1_pressed"]
-[connection signal="pressed" from="Control/PearlButton3" to="." method="_on_PearlButton3_pressed"]
-[connection signal="pressed" from="Control/PearlButton3" to="." method="_on_PearlButton1_pressed"]
 [connection signal="pressed" from="Control/NewGame" to="." method="_on_NewGame_pressed"]
 [connection signal="pressed" from="Control/LoadGame" to="." method="_on_LoadGame_pressed"]
 [connection signal="pressed" from="Control/ChangeAppearance" to="." method="_on_ChangeAppearance_pressed"]
 [connection signal="pressed" from="Control/Settings" to="." method="_on_Settings_pressed"]
-[connection signal="pressed" from="Control/tutorial" to="." method="_on_tutorial_pressed"]
-[connection signal="pressed" from="Control/exit" to="." method="_on_exit_pressed"]
-[connection signal="pressed" from="tutorial/yes" to="." method="_on_yes_pressed"]
-[connection signal="pressed" from="tutorial/no" to="." method="_on_no_pressed"]
-[connection signal="pressed" from="exit/ExitYes" to="." method="_on_ExitYes_pressed"]
-[connection signal="pressed" from="exit/ExitNo" to="." method="_on_ExitNo_pressed"]

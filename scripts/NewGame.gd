@@ -1,3 +1,4 @@
+#NewGame.gd
 extends Button
 
 func _ready():
@@ -5,6 +6,5 @@ func _ready():
 
 # connect to node tab
 func _on_Button_pressed():
-	get_tree().change_scene("res://src/components/how2play.tscn")
+	get_tree().change_scene("res://src/levels/Level1.tscn")
 	print("Hello World")
-

@@ -10,36 +10,24 @@ onready var s3 = $Stars/Star3
 onready var level_complete_menu = $LevelComplete
 onready var health_bar = $HealthBar
 onready var game_over_menu = $GameOver
-onready var level_timer_node = $LevelTimer 
-onready var time_left_label = $LevelTimer/TimeLeft
-
-var current_level := 1 #pang track ng level number
-onready var bg_level_complete= $for_second_bg
+onready var level_timer_node = $LevelTimer # Renamed for clarity, reference to Timer node
+onready var time_left_label = $TimeLeft # Renamed for clarity, reference to Label node
 
 # stars for level complete menu
-onready var s4 = $LevelComplete/PanelContainer/Star1
-onready var s5 = $LevelComplete/PanelContainer/Star2
-onready var s6 = $LevelComplete/PanelContainer/Star3
+onready var s4 = $LevelComplete/PanelContainer/VBoxContainer/PanelContainer/Star1
+onready var s5 = $LevelComplete/PanelContainer/VBoxContainer/PanelContainer/Star2
+onready var s6 = $LevelComplete/PanelContainer/VBoxContainer/PanelContainer/Star3
 
 # placeholder for hearts
-onready var heart1= $Hearts/heart1
-onready var heart2 = $Hearts/heart2
-onready var heart3= $Hearts/heart3
+onready var heart1 = $Hearts/Heart1
+onready var heart2 = $Hearts/Star5
+onready var heart3 = $Hearts/Star6
 
-#for the progress bar lights up of fish
-onready var Medium_clr= $ProgressBar/Medium_clr
-onready var Large_clr= $ProgressBar/Large_clr
+#Level label
+onready var level_label = $LevelLabel
+
 
 export var score_to_complete_level: int = 100
-var medium_threshold = Global.CAN_EAT_MEDIUM_THRESHOLD
-var large_threshold = Global.CAN_EAT_LARGE_THRESHOLD
-var current_size = Global.current_size_points
-
-#pause menu
-onready var pause_menu = $PauseMenu
-
-#fishcount
-onready var fish_count= $FishCount
 
 # Time thresholds for LOSING stars (based on ELAPSED time)
 const LOSE_3RD_STAR_AFTER: float = 30.0  # After 30s, can only get max 2 stars
@@ -52,14 +40,7 @@ var current_potential_stars: int = 3 # Start with the potential for 3 stars
 var stars_earned_this_level: int = 0 # Final stars when level is completed
 
 func _ready():
-	score_label.raise()   # forces labels to be up front without canvas layer
-	time_left_label.show()
-	time_left_label.raise()  # Force front display
-	$lvl_number.text =  str(Global.current_level)
-	$LevelComplete/lvl_num1.text = str(Global.current_level)
-	$GameOver/lvl_num2.text = str(Global.current_level)
-	
-	Global.connect("fish_eaten_updated", self, "_on_fish_eaten_updated")
+	Global.connect("time_added", self, "_on_Global_time_added")
 	Global.connect("score_updated", self, "_on_Global_score_updated")
 	progressBar.max_value = score_to_complete_level
 	_on_Global_score_updated(Global.get_score())
@@ -85,17 +66,18 @@ func _ready():
 	update_ingame_star_display(current_potential_stars) # Initial display of 3 stars
 	update_time_display()
 	
-
-
-#INSERT FUNCTION FOR THE MEDIUM AND LARGE THRESHOLD, IF MEDIUM THRESHOLD IS TRUE, MEDIUM_CLR SHOULD BE VISIBLE.
-
+	heart1.modulate = Color.red
+	heart2.modulate = Color.red
+	heart3.modulate = Color.red
+	
+	# Set the level label text
+	if level_label:
+		level_label.text = "Level " + str(Global.current_level_number)
+	
 
 # Called every frame
 func _process(_delta):
 	update_time_display()
-	_on_Global_current_size()
-	
-	
 	
 	# Only update potential stars if the level is not yet complete and game not paused by a menu
 	if not Global.is_level_complete and (not get_tree().paused or level_complete_menu.visible or game_over_menu.visible): # Allow update if menus are up for final display
@@ -119,8 +101,6 @@ func _process(_delta):
 			if new_potential_stars != current_potential_stars:
 				current_potential_stars = new_potential_stars
 			update_ingame_star_display(current_potential_stars)
-			
-
 
 func update_time_display():
 	if level_timer_node and time_left_label:
@@ -131,56 +111,49 @@ func update_time_display():
 		var seconds = int(time_remaining_seconds) % 60 # Use int() for whole seconds
 		
 		# Format with leading zeros for seconds
-		time_left_label.text = "%02d:%02d" % [minutes, seconds]
+		time_left_label.text = "Time: %02d:%02d" % [minutes, seconds]
 		# Or just raw seconds:
 		# time_left_label.text = "Time Left: " + str(snapped(time_remaining_seconds, 0.1)) # Snapped to 1 decimal
 
 # This function updates the main gameplay star display
 func update_ingame_star_display(stars_to_show: int):
-	# Update in-game star UI
+	# Assuming star1_node, star2_node, star3_node are the main UI stars visible during gameplay
 	if not is_instance_valid(s1) or not is_instance_valid(s2) or not is_instance_valid(s3):
 		print_debug("WARNING (GUI): In-game star nodes (Star1, Star2, Star3) not found for display.")
 		return
 
-	s1.visible = false
-	s2.visible = false
-	s3.visible = false
+	# print_debug("Updating in-game stars to show: ", stars_to_show) # Can be noisy
+	s1.modulate = Color.black
+	s2.modulate = Color.black
+	s3.modulate = Color.black
 
-	if stars_to_show >= 1:
-		s3.visible = true
+	if stars_to_show >= 1: # If 1 star or more, light up the first one (e.g. $Star3 if your nodes are ordered 3,2,1)
+		s1.modulate = Color.yellow
+		s4.modulate = Color.yellow
 	if stars_to_show >= 2:
-		s2.visible = true
+		s2.modulate = Color.yellow
+		s5.modulate = Color.yellow
 	if stars_to_show >= 3:
-		s1.visible = true
-
-	# --- Reflect changes in level menu stars as well ---
-	if not is_instance_valid(s4) or not is_instance_valid(s5) or not is_instance_valid(s6):
-		print_debug("WARNING (GUI): Menu star nodes (s4, s5, s6) not found for display.")
-		return
-
-	s4.visible = false
-	s5.visible = false
-	s6.visible = false
-
-	if stars_to_show >= 1:
-		s4.visible = true
-	if stars_to_show >= 2:
-		s5.visible = true
-	if stars_to_show >= 3:
-		s6.visible = true
+		s3.modulate = Color.yellow 
+		s6.modulate = Color.yellow
 
 func _on_player_health_updated(new_health: int):
 	if health_bar:
 		health_bar.value = new_health
 	print("GUI: Player health updated to ", new_health)
 	
-	if new_health == 0:
-		heart1.visible = false
-	if new_health <= 1:
-		heart2.visible= false
-	if new_health <= 2:
-		heart3.visible= false
+	# Reset all hearts to black first
+	heart1.modulate = Color.black
+	heart2.modulate = Color.black
+	heart3.modulate = Color.black
 
+	# Turn hearts red based on current health
+	if new_health >= 1:
+		heart1.modulate = Color.red
+	if new_health >= 2:
+		heart2.modulate = Color.red
+	if new_health >= 3:
+		heart3.modulate = Color.red
 
 func _on_Global_player_died(): # Connected to Global.player_died
 	print("GUI: Received player_died signal. Showing game over.")
@@ -188,24 +161,23 @@ func _on_Global_player_died(): # Connected to Global.player_died
 
 func show_game_over_menu():
 	if game_over_menu:
-		bg_level_complete.visible = true
 		game_over_menu.visible = true
-
-	# Ensure the level complete menu is hidden
+	# Ensure other menus are not conflicting
 	if level_complete_menu:
-		level_complete_menu.visible = false
-
-	# Pause the game if it's not already paused
+		level_complete_menu.visible = false # Hide level complete if it was somehow visible
+	# Pause game if not already (player death might pause it too)
 	if not get_tree().paused:
 		get_tree().paused = true
+	# You might want to set a Global.is_game_over = true flag
+	# to prevent pause menu from opening, similar to is_level_complete
 
-		
-#this function is called when the target score is met
+# This function is called when the SCORE target is met
 func _on_Global_score_updated(new_score: int):
 	if score_label:
-		score_label.text = str(new_score) + "/150"
-
-	if progressBar:
+		score_label.text = "Score: " + str(new_score)
+	
+	# Update progress bar (if still used for score visually)
+	if progressBar: # Check if progressBar exists
 		progressBar.value = new_score
 
 	# Check for level completion based on score
@@ -224,20 +196,9 @@ func _on_Global_score_updated(new_score: int):
 			else:
 				show_level_complete() # This will display earned stars on the complete menu
 			show_level_complete() # Show the level complete menu (which will display the stars)
-			
 	# else:
 		# If you had old star update logic here based on score progression, remove or adapt it.
 		# update_stars_based_on_score_progression(new_score) # Example old call
-func _on_Global_current_size():
-	
-	Medium_clr.visible = false
-	Large_clr.visible = false
-	
-	if Global.current_size_points >= Global.CAN_EAT_MEDIUM_THRESHOLD:
-		Medium_clr.visible = true
-	if Global.current_size_points >= Global.CAN_EAT_LARGE_THRESHOLD:
-		Large_clr.visible = true
-
 
 # old method, for reference onnly
 #func update_stars(current_score: int):
@@ -265,7 +226,7 @@ func _on_LevelTimer_timeout():
 		current_potential_stars = 0 # No more potential
 		print("Time up and score not met. Level Failed.")
 		update_ingame_star_display(0) # Make sure in-game UI shows 0 stars
-		#update_star_visuals_on_menu(game_over_menu, 0) # Show 0 stars on fail menu
+		update_star_visuals_on_menu(game_over_menu, 0) # Show 0 stars on fail menu
 		show_game_over_menu()
 		if not get_tree().paused:
 			get_tree().paused = true
@@ -285,57 +246,45 @@ func _on_LevelTimer_timeout():
 #		# or it could be a "level failed" if meeting TIME_FOR_1_STAR is mandatory.
 #		# For now, we assume it's 0 stars but level is still complete because score was met.
 
-#fishcount
-func _on_fish_eaten_updated(new_count: int):
-	if fish_count:
-		fish_count.text = str(new_count)
-	print("GUI: Fish count updated to ", new_count)
-
-
 
 # This function is called when the level is successfully completed by score
 func show_level_complete():
-	Global.set_level_complete_status(true) #flag
+	Global.set_level_complete_status(true) # flag
 
-	# Stop the level timer
 	if level_timer_node:
 		level_timer_node.stop()
 
-	# Update stars visual (only if stars earned variable is valid)
-	#update_star_visuals_on_menu(level_complete_menu, stars_earned_this_level)
+	# stars_earned_this_level should have been set in _on_Global_score_updated
+	update_star_visuals_on_menu(level_complete_menu, stars_earned_this_level)
 
-	# Show level complete UI
-	if level_complete_menu:
-		bg_level_complete.visible = true
-		level_complete_menu.visible = true
-		
-
-	# Pause the game if not already paused
-	if not get_tree().paused:
+	level_complete_menu.visible = true
+	if not get_tree().paused: # Ensure pausing only if not already paused by game over for other reasons
 		get_tree().paused = true
 		print("Level Complete! Stars earned: ", stars_earned_this_level)
 
+
 # Generic function to update star visuals on a given menu panel (level complete, game over)
 # This remains the same as before.
-#func update_star_visuals_on_menu(menu_node: Node, stars_earned_this_level: int) -> void:
-#	var star2 = menu_node.get_node("LevelComplete/PanelContainer/Star2")
-#	var star3 = menu_node.get_node("LevelComplete/PanelContainer/Star3")
-#
-#	if not star1 or not star2 or not star3:
-#		print_debug("Some star nodes could not be found in the level complete menu.")
-#		return
+func update_star_visuals_on_menu(menu_node_panel, stars_count: int):
+	if not is_instance_valid(menu_node_panel):
+		return
 
-	# Set all to visible or default first
-#	s4.visible = false
-#	s5.visible = false
-#	s6.visible = false
+	if not s1 or not s2 or not s3:
+		print_debug("WARNING (GUI): Star nodes (Star1, Star2, Star3) not found as children of menu: ", menu_node_panel.name)
+		return
 
-#	if stars_earned_this_level >= 1:
-#		s4.visible = true
-#	if stars_earned_this_level >= 2:
-#		s5.visible = true
-#	if stars_earned_this_level >= 3:
-#		s6.visible = true
+	s1.modulate = Color.black 
+	s2.modulate = Color.black
+	s3.modulate = Color.black
+
+	# Adjust this logic based on how your stars are visually ordered (e.g., left-to-right)
+	# Assuming Star1 is for 3 stars, Star2 for 2 stars, Star3 for 1 star visually on the menu
+	if stars_count >= 1:
+		s3.modulate = Color.yellow # 1st star to light up (e.g., rightmost or bottommost)
+	if stars_count >= 2:
+		s2.modulate = Color.yellow # 2nd star
+	if stars_count >= 3:
+		s1.modulate = Color.yellow # 3rd star (e.g., leftmost or topmost)
 
 # Call this when transitioning away from the level complete screen (e.g., "Next Level" button)
 func hide_level_complete_and_unpause():
@@ -344,25 +293,55 @@ func hide_level_complete_and_unpause():
 	# Only unpause if the pause menu ISN'T also trying to keep it paused
 	if get_tree().paused: # Only unpause if it was paused by level complete
 		get_tree().paused = false
+		
+func _on_Global_time_added(seconds: float):
+	if level_timer_node:
+		var new_time = level_timer_node.time_left + seconds
+		level_timer_node.stop()
+		level_timer_node.start(new_time)
+		print("GUI: Added", seconds, "seconds. New time:", new_time)
+
 
 func _on_Restart_pressed():
-#	print("DEBUG: _on_RetryLevelButton_pressed CALLED")
-	Global.set_level_complete_status(false) # Reset flag
+	Global.set_level_complete_status(false)
 	get_tree().paused = false
 	Global.reset_score()
 	Global.reset_player_stats()
-	print("restart button pressed")
-	get_tree().reload_current_scene()
+
+	print("Restart button pressed")
+
+	var loading_scene = preload("res://src/scenes/LoadingScreen.tscn").instance()
+	loading_scene.target_scene_path = get_tree().current_scene.filename  # Reload same scene
+	get_tree().root.add_child(loading_scene)
+	
+	var current_scene = get_tree().current_scene
+	get_tree().current_scene = loading_scene
+	current_scene.queue_free()
+
 
 func _on_Continue_pressed():
-#	print("DEBUG: _on_NextLevelButton_pressed CALLED")
-	Global.set_level_complete_status(false) 
+	Global.set_level_complete_status(false)
 	get_tree().paused = false
-	Global.reset_score() 
+	Global.reset_score()
 	Global.reset_player_stats()
-	Global.current_level += 1
 	print("Next Level button pressed")
-	get_tree().change_scene(Global.getter_for_path_next_scene())
+
+	Global.advance_to_next_level()  # This sets Global.path_to_next_scene
+	var next_scene_path = Global.getter_for_path_next_scene()
+
+	if next_scene_path == "":
+		print("ERROR: Next scene path is empty!")
+		return
+
+	print("Next scene path:", next_scene_path)
+
+	var loading_scene = preload("res://src/scenes/LoadingScreen.tscn").instance()
+	loading_scene.target_scene_path = next_scene_path
+	get_tree().root.add_child(loading_scene)
+
+	var current_scene = get_tree().current_scene
+	get_tree().current_scene = loading_scene
+	current_scene.queue_free()
 
 func _on_MainMenu_pressed():
 #	print("DEBUG: _on_LC_MainMenuButton_pressed CALLED")
@@ -380,7 +359,3 @@ func _input(event):
 	if event.is_action_pressed("debugging"):
 		print("Save Reset: changed to level 1")
 		Global.save_player_progress("res://src/levels/Level1.tscn")
-
-
-
-
