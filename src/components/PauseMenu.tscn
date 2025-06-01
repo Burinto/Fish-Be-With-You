@@ -1,9 +1,25 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://scripts/PauseMenu.gd" type="Script" id=1]
-[ext_resource path="res://src/scenes/Settings.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/Settings/play hovered.png" type="Texture" id=2]
+[ext_resource path="res://assets/Settings/modal bg.png" type="Texture" id=3]
+[ext_resource path="res://assets/Settings/restart.png" type="Texture" id=4]
+[ext_resource path="res://assets/Settings/play.png" type="Texture" id=5]
+[ext_resource path="res://assets/Settings/home.png" type="Texture" id=6]
+[ext_resource path="res://assets/Settings/Sound Effects.png" type="Texture" id=7]
+[ext_resource path="res://assets/Settings/line.png" type="Texture" id=8]
+[ext_resource path="res://assets/Settings/pearl adjuster.png" type="Texture" id=9]
+[ext_resource path="res://assets/Settings/Music.png" type="Texture" id=10]
+[ext_resource path="res://assets/Settings/mute btn.png" type="Texture" id=11]
+[ext_resource path="res://assets/Settings/may sound btn.png" type="Texture" id=12]
+[ext_resource path="res://assets/Settings/home hovered.png" type="Texture" id=13]
+[ext_resource path="res://assets/Settings/restart pressed.png" type="Texture" id=14]
+[ext_resource path="res://assets/Settings/play pressed.png" type="Texture" id=15]
+[ext_resource path="res://assets/Settings/restart hovered.png" type="Texture" id=16]
+[ext_resource path="res://assets/Settings/home pressed.png" type="Texture" id=17]
+[ext_resource path="res://src/componentsblur.tres" type="Animation" id=18]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id=16]
 code = "shader_type canvas_item;
 
 uniform float lod: hint_range(0.0, 5) = 0.0;
@@ -14,7 +30,7 @@ void fragment(){
 }"
 
 [sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
+shader = SubResource( 16 )
 shader_param/lod = 0.0
 
 [sub_resource type="Animation" id=3]
@@ -32,7 +48,7 @@ tracks/0/keys = {
 "values": [ 0.0 ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("../PanelContainer:modulate")
+tracks/1/path = NodePath("../CanvasLayer/PanelContainer:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -44,33 +60,45 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=4]
-resource_name = "blur"
-length = 0.3
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:material:shader_param/lod")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.3 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ 0.0, 0.892 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("../PanelContainer:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 0.3 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
-}
+[sub_resource type="StyleBoxTexture" id=6]
+texture = ExtResource( 3 )
+region_rect = Rect2( 0, 0, 3672, 2884 )
+
+[sub_resource type="StyleBoxTexture" id=10]
+texture = ExtResource( 2 )
+region_rect = Rect2( 0, 0, 4172, 4172 )
+
+[sub_resource type="StyleBoxTexture" id=11]
+texture = ExtResource( 15 )
+region_rect = Rect2( 0, 0, 4230, 4230 )
+
+[sub_resource type="StyleBoxTexture" id=7]
+texture = ExtResource( 5 )
+region_rect = Rect2( 0, 0, 4172, 4172 )
+
+[sub_resource type="StyleBoxTexture" id=12]
+texture = ExtResource( 13 )
+region_rect = Rect2( 0, 0, 4172, 4172 )
+
+[sub_resource type="StyleBoxTexture" id=13]
+texture = ExtResource( 17 )
+region_rect = Rect2( 0, 0, 4230, 4230 )
+
+[sub_resource type="StyleBoxTexture" id=9]
+texture = ExtResource( 6 )
+region_rect = Rect2( 0, 0, 4172, 4172 )
+
+[sub_resource type="StyleBoxTexture" id=14]
+texture = ExtResource( 16 )
+region_rect = Rect2( 0, 0, 4172, 4172 )
+
+[sub_resource type="StyleBoxTexture" id=15]
+texture = ExtResource( 14 )
+region_rect = Rect2( 0, 0, 4230, 4230 )
+
+[sub_resource type="StyleBoxTexture" id=8]
+texture = ExtResource( 4 )
+region_rect = Rect2( 0, 0, 4172, 4172 )
 
 [node name="PauseMenu" type="Control"]
 pause_mode = 2
@@ -83,56 +111,96 @@ material = SubResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+pause_mode = 2
+root_node = NodePath("../ColorRect")
+autoplay = "RESET"
+anims/RESET = SubResource( 3 )
+anims/blur = ExtResource( 18 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+pause_mode = 2
+layer = 10
+visible = false
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -230.0
-margin_top = -230.0
-margin_right = 230.0
-margin_bottom = 230.0
+margin_left = -299.0
+margin_top = -378.0
+margin_right = 313.0
+margin_bottom = 154.0
+custom_styles/panel = SubResource( 6 )
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 453.0
-margin_bottom = 453.0
+[node name="Resume" type="Button" parent="CanvasLayer"]
+margin_left = 615.0
+margin_top = 339.0
+margin_right = 732.0
+margin_bottom = 430.0
+custom_styles/hover = SubResource( 10 )
+custom_styles/pressed = SubResource( 11 )
+custom_styles/normal = SubResource( 7 )
 
-[node name="Resume" type="Button" parent="PanelContainer/VBoxContainer"]
-margin_right = 446.0
-margin_bottom = 20.0
-text = "Resume"
+[node name="Quit" type="Button" parent="CanvasLayer"]
+margin_left = 471.0
+margin_top = 358.0
+margin_right = 574.0
+margin_bottom = 434.0
+custom_styles/hover = SubResource( 12 )
+custom_styles/pressed = SubResource( 13 )
+custom_styles/normal = SubResource( 9 )
 
-[node name="Restart" type="Button" parent="PanelContainer/VBoxContainer"]
-margin_top = 24.0
-margin_right = 446.0
-margin_bottom = 44.0
-text = "Restart"
+[node name="Restart" type="Button" parent="CanvasLayer"]
+margin_left = 758.0
+margin_top = 357.0
+margin_right = 860.0
+margin_bottom = 431.0
+custom_styles/hover = SubResource( 14 )
+custom_styles/pressed = SubResource( 15 )
+custom_styles/normal = SubResource( 8 )
 
-[node name="Settings" type="Button" parent="PanelContainer/VBoxContainer"]
-margin_top = 48.0
-margin_right = 446.0
-margin_bottom = 68.0
-text = "Settings"
+[node name="Music" type="Sprite" parent="CanvasLayer"]
+position = Vector2( 534, 258 )
+scale = Vector2( 0.196315, 0.206428 )
+texture = ExtResource( 10 )
 
-[node name="Quit" type="Button" parent="PanelContainer/VBoxContainer"]
-margin_top = 72.0
-margin_right = 446.0
-margin_bottom = 92.0
-text = "Quit"
+[node name="Line" type="Sprite" parent="CanvasLayer"]
+position = Vector2( 711, 259 )
+scale = Vector2( 0.237844, 0.255674 )
+texture = ExtResource( 8 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-root_node = NodePath("../ColorRect")
-autoplay = "RESET"
-anims/RESET = SubResource( 3 )
-anims/blur = SubResource( 4 )
+[node name="PearlAdjuster" type="Sprite" parent="CanvasLayer/Line"]
+position = Vector2( 428.853, -3.91132 )
+scale = Vector2( 0.788965, 0.78256 )
+texture = ExtResource( 9 )
 
-[node name="Settings" parent="." instance=ExtResource( 2 )]
-visible = false
-used_in_main_menu = false
+[node name="Line2" type="Sprite" parent="CanvasLayer"]
+position = Vector2( 712, 304 )
+scale = Vector2( 0.237844, 0.255674 )
+texture = ExtResource( 8 )
 
-[connection signal="pressed" from="PanelContainer/VBoxContainer/Resume" to="." method="_on_Resume_pressed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/Restart" to="." method="_on_Restart_pressed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/Settings" to="." method="_on_Settings_pressed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/Quit" to="." method="_on_Quit_pressed"]
+[node name="PearlAdjuster" type="Sprite" parent="CanvasLayer/Line2"]
+position = Vector2( -412.035, -7.82245 )
+scale = Vector2( 0.788965, 0.78256 )
+texture = ExtResource( 9 )
+
+[node name="MaySoundBtn" type="Sprite" parent="CanvasLayer"]
+position = Vector2( 584, 259 )
+scale = Vector2( 0.18765, 0.20008 )
+texture = ExtResource( 12 )
+
+[node name="MuteBtn" type="Sprite" parent="CanvasLayer"]
+position = Vector2( 585, 304 )
+scale = Vector2( 0.18765, 0.20008 )
+texture = ExtResource( 11 )
+
+[node name="SoundEffects" type="Sprite" parent="CanvasLayer"]
+position = Vector2( 522, 303 )
+scale = Vector2( 0.117131, 0.155827 )
+texture = ExtResource( 7 )
+
+[connection signal="pressed" from="CanvasLayer/Resume" to="." method="_on_Resume_pressed"]
+[connection signal="pressed" from="CanvasLayer/Quit" to="." method="_on_Quit_pressed"]
+[connection signal="pressed" from="CanvasLayer/Restart" to="." method="_on_Restart_pressed"]
